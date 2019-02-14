@@ -5,31 +5,47 @@ const uglify = require('gulp-uglify');
 const cssnano = require('gulp-cssnano');
 const sourcemaps = require('gulp-sourcemaps');
 
+const paths = {
+    scr: {
+        styles: 'styles',
+        scripts: 'scripts'
+    },
+    bulding: {
+        styles: 'styles',
+        scripts: 'scripts'
+    },
+    buildNames: {
+        styles: 'index.min.css',
+        scripts: 'index.min.js'
+    }
+}
+
 gulp.task('hello', () => console.log(Date()));
 
 gulp.task('taskjs', () => {
-    return gulp.src(['*.js'])
+    return gulp.src([paths.scr.scripts])
     .pipe(sourcemaps.init())
-    .pipe(concat(['index.js'])
+    .pipe(concat([paths.buildNames.scripts])
     .pipe(babel({
         presets: ['@babael/env']
     }))
     .pipe(uglify())
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest('js'));
+    .pipe(gulp.dest(paths.bulding.scripts));
 });
-
-
 
 gulp.task('taskcss', () => {
-    return gulp.src(['*.css'])
+    return gulp.src([paths.scr.styles])
     .pipe(sourcemaps.init())
-    .pipe(concat(['index.js'])
+    .pipe(concat([paths.buildNames.styles])
     .pipe(cssnano())
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest('css'));
+    .pipe(gulp.dest(paths.bulding.styles));
 });
 
-
-
 gulp.task('default', ['taskjs', 'taskcss'])
+
+gulp.task('watch', () => {
+    gulp.watch(paths.scr.scripts, ['taskjs']);
+    gulp.watch(paths.scr.styles, ['taskcss']);
+})
