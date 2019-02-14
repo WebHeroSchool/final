@@ -2,11 +2,12 @@ const gulp = require('gulp');
 const babel = require('gulp-babel');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
+const cssnano = require('gulp-cssnano');
 
 gulp.task('hello', () => console.log(Date()));
 
 gulp.task('taskjs', () => {
-    return gulp.src(['scripts.js'])
+    return gulp.src(['*.js'])
     .pipe(concat(['index.js'])
     .pipe(babel({
         presets: ['@babael/env']
@@ -15,15 +16,11 @@ gulp.task('taskjs', () => {
     .pipe(gulp.dest('js'));
 });
 
+
+
 gulp.task('taskcss', () => {
-    return gulp.src(['styles.css'])
+    return gulp.src(['*.css'])
+    .pipe(concat(['index.js'])
+    .pipe(cssnano())
     .pipe(gulp.dest('css'));
 });
-
-gulp.task('default', () =>
-    gulp.scr('scr/app.js')
-        .pipe(babel({
-            presets: ['@babael/env']
-        }))
-        .pipe(gulp.dest('dist'))
-);
