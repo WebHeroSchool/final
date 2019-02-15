@@ -44,7 +44,7 @@ gulp.task('taskcss', () => {
     .pipe(gulp.dest(paths.bulding.styles));
 });
 
-gulp.task('default', ['taskjs', 'taskcss'])
+gulp.task('build', ['taskjs', 'taskcss'])
 
 
 gulp.task('browser-sync', () => {
