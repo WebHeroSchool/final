@@ -57,8 +57,8 @@ gulp.task('browser-sync', () => {
     gulp.watch(paths.scr.styles, ['taskcss-watch']);
 })
 
-
-
 gulp.task('taskjs-watch', ['js'], () => browserSync.reload());
-
 gulp.task('taskcss-watch', ['css'], () => browserSync.reload());
+
+gulp.task('prod', ['build']);
+gulp.task('dev', ['build', 'browser-sync']);
