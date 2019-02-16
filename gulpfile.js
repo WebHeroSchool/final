@@ -7,6 +7,7 @@ const cssnano = require('gulp-cssnano');
 const sourcemaps = require('gulp-sourcemaps');
 const browserSync = require('browser-sync').create();
 const env = require('gulp-env');
+const clean = require('gulp-clean');
 
 const paths = {
     scr: {
@@ -26,6 +27,11 @@ const paths = {
 env ({
     file: '.env',
     type: 'ini',
+});
+
+gulp.task('clean', function () {
+    gulp.src('build', {read: false})
+        .pipe(clean());
 });
 
 gulp.task('js', () => {
@@ -65,5 +71,9 @@ gulp.task('browser-sync', () => {
 gulp.task('js-watch', ['js'], () => browserSync.reload());
 gulp.task('css-watch', ['css'], () => browserSync.reload());
 
+
+
+
 gulp.task('prod', ['build']);
 gulp.task('dev', ['build', 'browser-sync']);
+gulp.task('clean-build', ['clean']);

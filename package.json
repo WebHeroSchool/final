@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "gulp dev",
-    "build": "gulp"
+    "build": "gulp",
+    "clean": "clean-build"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "@babel/preset-env": "^7.3.1",
     "gulp": "^3.9.1",
     "gulp-babel": "^8.0.0",
+    "gulp-clean": "^0.4.0",
     "gulp-concat": "^2.6.1",
     "gulp-cssnano": "^2.1.3",
     "gulp-env": "^0.4.0",
