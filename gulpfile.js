@@ -48,8 +48,6 @@ gulp.task('js', () => {
 });
 
 gulp.task('css', () => {
-    const plugins = [];
-    
     return gulp.src([paths.scr.styles])
     .pipe(sourcemaps.init())
     .pipe(postcss)

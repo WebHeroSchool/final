@@ -34,6 +34,7 @@
     "gulp-uglify": "^3.0.1"
   },
   "dependencies": {
+    "autoprefixer": "^9.4.7",
     "browser-sync": "^2.26.3"
   }
 }

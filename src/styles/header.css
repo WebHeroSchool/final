@@ -1,0 +1,7 @@
+.header {
+    background: #c4c4c4;
+}
+
+::placeholder {
+    color: gray;
+}
