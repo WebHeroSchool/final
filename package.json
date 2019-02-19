@@ -22,6 +22,8 @@
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.3.1",
+    "assets": "^3.0.1",
+    "autoprefixer": "^9.4.7",
     "gulp": "^3.9.1",
     "gulp-babel": "^8.0.0",
     "gulp-clean": "^0.4.0",
@@ -31,10 +33,12 @@
     "gulp-if": "^2.0.2",
     "gulp-postcss": "^8.0.0",
     "gulp-sourcemaps": "^2.6.4",
-    "gulp-uglify": "^3.0.1"
+    "gulp-uglify": "^3.0.1",
+    "nesting": "^0.1.0",
+    "postcss-preset-env": "^6.5.0",
+    "short": "^2.6.0"
   },
   "dependencies": {
-    "autoprefixer": "^9.4.7",
     "browser-sync": "^2.26.3"
   }
 }
