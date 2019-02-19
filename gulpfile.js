@@ -8,14 +8,29 @@ const sourcemaps = require('gulp-sourcemaps');
 const browserSync = require('browser-sync').create();
 const env = require('gulp-env');
 const clean = require('gulp-clean');
-const postcss = require("gulp-postcss")
+const postcss = require("gulp-postcss");
+const autoprefixer = require('autoprefixer');
+
+gulp.task('browser-sync', () => {
+    browserSync.init({
+        server: {
+            baseDir: './'
+        }
+    })
+    gulp.watch(paths.scr.scripts, ['js-watch']);
+    gulp.watch(paths.scr.styles, ['css-watch']);
+})
+
+gulp.task('js-watch', ['js'], () => browserSync.reload());
+gulp.task('css-watch', ['css'], () => browserSync.reload());
 
 const paths = {
-    scr: {
+    src: {
         styles: 'src/styles/*.css',
-        scripts: 'scr/scripts/*.js'
+        scripts: 'src/scripts/*.js'
     },
-    bulding: {
+    build: {
+        dir: 'build',
         styles: 'build/styles',
         scripts: 'build/scripts'
     },
@@ -36,46 +51,32 @@ gulp.task('clean', function () {
 });
 
 gulp.task('js', () => {
-    return gulp.src([paths.scr.scripts])
+    return gulp.src([paths.src.scripts])
     .pipe(sourcemaps.init())
     .pipe(concat(paths.buildNames.scripts))
     .pipe(babel({
         presets: ['@babael/env']
     }))
-    .pipe(gulpif(process.env.NODE_ENV === 'production', uglify()))
+        .pipe(gulpif(process.env.NODE_ENV === 'production', uglify()))
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest(paths.bulding.scripts));
+    .pipe(gulp.dest(paths.build.scripts));
 });
 
 gulp.task('css', () => {
-    return gulp.src([paths.scr.styles])
+    const plugins = [
+        
+    ];
+
+    return gulp.src([paths.src.styles])
     .pipe(sourcemaps.init())
-    .pipe(postcss)
+    .pipe(postcss(plugins))
     .pipe(concat(paths.buildNames.styles))
     .pipe(gulpif(process.env.NODE_ENV === 'production', cssnano()))
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest(paths.bulding.styles));
+    .pipe(gulp.dest(paths.build.styles));
 });
 
 gulp.task('build', ['js', 'css'])
-
-
-gulp.task('browser-sync', () => {
-    browserSync.init({
-        server: {
-            baseDir: './'
-        }
-    })
-    gulp.watch(paths.scr.scripts, ['js-watch']);
-    gulp.watch(paths.scr.styles, ['css-watch']);
-})
-
-gulp.task('js-watch', ['js'], () => browserSync.reload());
-gulp.task('css-watch', ['css'], () => browserSync.reload());
-
-
-
-
 gulp.task('prod', ['build']);
 gulp.task('dev', ['build', 'browser-sync']);
-gulp.task('clean-build', ['clean']);
+gulp.task('clean', ['clean']);
