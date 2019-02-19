@@ -11,6 +11,12 @@ const clean = require('gulp-clean');
 const postcss = require("gulp-postcss");
 const autoprefixer = require('autoprefixer');
 
+const nested = require('postcss-nested');
+const short = require('postcss-short');
+const assets  = require('postcss-assets');
+const postcssPresetEnv = require('postcss-preset-env');
+const autoprefixer = require('autoprefixer');
+
 gulp.task('browser-sync', () => {
     browserSync.init({
         server: {
@@ -26,17 +32,18 @@ gulp.task('css-watch', ['css'], () => browserSync.reload());
 
 const paths = {
     src: {
-        styles: 'src/styles/*.css',
-        scripts: 'src/scripts/*.js'
+        dir: 'src',
+        scripts: 'src/**/*.js',
+        styles: 'src/**/*.css'
     },
     build: {
-        dir: 'build',
-        styles: 'build/styles',
-        scripts: 'build/scripts'
+        dir: 'build/',
+        scripts: 'build/scripts',
+        styles: 'build/styles'
     },
     buildNames: {
-        styles: 'index.min.css',
-        scripts: 'index.min.js'
+        scripts: 'scripts.min.js',
+        styles: 'styles.min.css'
     }
 }
 
@@ -51,32 +58,41 @@ gulp.task('clean', function () {
 });
 
 gulp.task('js', () => {
-    return gulp.src([paths.src.scripts])
-    .pipe(sourcemaps.init())
-    .pipe(concat(paths.buildNames.scripts))
-    .pipe(babel({
-        presets: ['@babael/env']
-    }))
-        .pipe(gulpif(process.env.NODE_ENV === 'production', uglify()))
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest(paths.build.scripts));
+    return gulp.src(paths.src.scripts)
+        .pipe(sourcemaps.init())
+            .pipe(concat(paths.buildNames.scripts))
+            .pipe(babel({
+                presets: ['@babel/env']
+            }))
+            .pipe(gulpif(process.env.NODE_ENV === 'production', uglify()))
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest(paths.build.scripts));
 });
 
 gulp.task('css', () => {
     const plugins = [
-        
+        autoprefixer({
+            browsers: ['last 1 version']
+        }),
+        postcssPresetEnv,
+        assets({
+            loadPaths: ['src/images/'],
+            relativeTo: 'src/styles/'
+        }),
+        short,
+        nested
     ];
 
-    return gulp.src([paths.src.styles])
-    .pipe(sourcemaps.init())
-    .pipe(postcss(plugins))
-    .pipe(concat(paths.buildNames.styles))
-    .pipe(gulpif(process.env.NODE_ENV === 'production', cssnano()))
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest(paths.build.styles));
+    gulp.src(paths.src.styles)
+        .pipe(sourcemaps.init())
+            .pipe(postcss(plugins))
+            .pipe(concat(paths.buildNames.styles))
+            .pipe(gulpif(process.env.NODE_ENV === 'production', cssnano()))
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest(paths.build.styles));
 });
 
 gulp.task('build', ['js', 'css'])
 gulp.task('prod', ['build']);
 gulp.task('dev', ['build', 'browser-sync']);
-gulp.task('clean', ['clean']);
+gulp.task('delete', ['clean']);
