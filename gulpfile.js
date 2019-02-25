@@ -9,13 +9,20 @@ const browserSync = require('browser-sync').create();
 const env = require('gulp-env');
 const clean = require('gulp-clean');
 const postcss = require("gulp-postcss");
-const autoprefixer = require('autoprefixer');
+const filter = require('gulp-filter');
 
+// postСSS
 const nested = require('postcss-nested');
 const short = require('postcss-short');
 const assets  = require('postcss-assets');
 const postcssPresetEnv = require('postcss-preset-env');
 const autoprefixer = require('autoprefixer');
+
+// Шаблонизаторы HTML
+const handlebars = require('gulp-compile-handlebars');
+const glob = require('glob');
+const rename = require('gulp-rename');
+
 
 gulp.task('browser-sync', () => {
     browserSync.init({
@@ -44,8 +51,9 @@ const paths = {
     buildNames: {
         scripts: 'scripts.min.js',
         styles: 'styles.min.css'
-    }
-}
+    },
+    templates: 'src/templates/**/*.hbs',
+};
 
 env ({
     file: '.env',
@@ -92,7 +100,24 @@ gulp.task('css', () => {
         .pipe(gulp.dest(paths.build.styles));
 });
 
-gulp.task('build', ['js', 'css'])
+
+gulp.task('compile', () => {
+    glob(paths.templates, (err, files) => {
+        if (!err) {
+            const options = {
+                ignorePartials: true,
+                batch: files.map(item => item.slice(0, item.lastIndexOf('/'))),
+            };
+
+           return gulp.src('${src/templates}/index.hbs')
+                .pipe(handlebars({},options))
+                .pipe(rename('index.html'))
+                .pipe(gulp.dest(paths.build.dir));
+        }
+    });
+});
+
+gulp.task('build', ['js', 'css']);
 gulp.task('prod', ['build']);
 gulp.task('dev', ['build', 'browser-sync']);
 gulp.task('delete', ['clean']);
