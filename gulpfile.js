@@ -23,6 +23,8 @@ const handlebars = require('gulp-compile-handlebars');
 const glob = require('glob');
 const rename = require('gulp-rename');
 
+const templateContext = require('./src/templates/test.json');
+
 
 gulp.task('browser-sync', () => {
     browserSync.init({
@@ -109,8 +111,8 @@ gulp.task('compile', () => {
                 batch: files.map(item => item.slice(0, item.lastIndexOf('/'))),
             };
 
-           return gulp.src('${src/templates}/index.hbs')
-                .pipe(handlebars({},options))
+           return gulp.src('src/templates/index.hbs')
+                .pipe(handlebars(templateContext, options))
                 .pipe(rename('index.html'))
                 .pipe(gulp.dest(paths.build.dir));
         }
