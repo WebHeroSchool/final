@@ -109,6 +109,10 @@ gulp.task('compile', () => {
             const options = {
                 ignorePartials: true,
                 batch: files.map(item => item.slice(0, item.lastIndexOf('/'))),
+                helpers: {
+                    capitals: str => str.toUpperCase(),
+                    sum: (a, b) => a + b
+                }
             };
 
            return gulp.src('src/templates/index.hbs')
