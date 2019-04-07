@@ -1,4 +1,5 @@
 const gulp = require('gulp');
+const eslint = require('gulp-eslint');
 const babel = require('gulp-babel');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
@@ -10,6 +11,9 @@ const env = require('gulp-env');
 const clean = require('gulp-clean');
 const postcss = require("gulp-postcss");
 const filter = require('gulp-filter');
+const rulesScripts = require('./eslintrc.json');
+
+
 
 // postСSS
 const nested = require('postcss-nested');
@@ -55,6 +59,10 @@ const paths = {
         styles: 'styles.min.css'
     },
     templates: 'src/templates/**/*.hbs',
+    lint: {
+        scripts: ['**/*.js', '!node_modules/**/*', '!build/**/*'],
+        styles: ['**/*.css', '!node_modules/**/*', '!build/**/*']
+    }
 };
 
 env ({
@@ -121,6 +129,18 @@ gulp.task('compile', () => {
                 .pipe(gulp.dest(paths.build.dir));
         }
     });
+});
+
+gulp.task('fonts', () => {
+    gulp.src('./src/fonts/**/*')
+        .pipe(filter(['*.woff', '*.woff2', '*.otf', '*.ttf']))
+        .pipe(gulp.dest(`${paths.build.dir}/fonts`));
+});
+
+gulp.task('eslint', () => {
+    gulp.src(paths.lint.scripts)
+    .pipe(eslint(rulesScripts))
+    .pipe(eslint.format());
 });
 
 gulp.task('build', ['js', 'css']);
