@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "galp lint",
+    "test": "galp lint && exit 1",
     "start": "gulp dev",
     "build": "gulp",
     "clean": "clean-build"
   },
+  "pre-push": [
+    "test"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/WebHeroSchool/final.git"
@@ -37,7 +40,8 @@
     "gulp-rename": "^1.4.0",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.1",
-    "postcss-preset-env": "^6.5.0"
+    "postcss-preset-env": "^6.5.0",
+    "pre-push": "^0.1.1"
   },
   "dependencies": {
     "browser-sync": "^2.26.3",
