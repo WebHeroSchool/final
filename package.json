@@ -12,15 +12,18 @@
   "pre-push": [
     "test"
   ],
+  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/WebHeroSchool/final.git"
   },
+
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/WebHeroSchool/final/issues"
   },
+
   "homepage": "https://github.com/WebHeroSchool/final#readme",
   "devDependencies": {
     "@babel/core": "^7.2.2",
