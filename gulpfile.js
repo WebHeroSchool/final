@@ -11,6 +11,14 @@ const clean = require('gulp-clean');
 const postcss = require("gulp-postcss");
 const filter = require('gulp-filter');
 
+const eslint = require('gulp-eslint');
+const stylelint = require('stylelint');
+const rulesScripts = require('./eslintrc.json');
+const rulesStyles = require('./stylelintrc.json');
+const templateContext = require('./src/templates/test.json');
+const reporter = require('postcss-reporter');
+
+
 // postСSS
 const nested = require('postcss-nested');
 const short = require('postcss-short');
@@ -23,7 +31,7 @@ const handlebars = require('gulp-compile-handlebars');
 const glob = require('glob');
 const rename = require('gulp-rename');
 
-const templateContext = require('./src/templates/test.json');
+
 
 
 gulp.task('browser-sync', () => {
@@ -55,6 +63,10 @@ const paths = {
         styles: 'styles.min.css'
     },
     templates: 'src/templates/**/*.hbs',
+    lint: {
+        scripts: ['**/*.js', '!node_modules/**/*', '!build/**/*'],
+        styles: ['**/*.css', '!node_modules/**/*', '!build/**/*']
+    }
 };
 
 env ({
@@ -121,6 +133,32 @@ gulp.task('compile', () => {
                 .pipe(gulp.dest(paths.build.dir));
         }
     });
+});
+
+gulp.task('fonts', () => {
+    gulp.src('./src/fonts/**/*')
+        .pipe(filter(['*.woff', '*.woff2', '*.otf', '*.ttf']))
+        .pipe(gulp.dest(`${paths.build.dir}/fonts`));
+});
+
+gulp.task('lint', ['eslint', 'stylelint']);
+
+gulp.task('eslint', () => {
+    gulp.src(paths.lint.scripts)
+        .pipe(eslint(rulesScripts))
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
+});
+
+gulp.task('stylelint', () => {
+    gulp.src(paths.lint.styles)
+        .pipe(postcss([
+            stylelint(rulesStyles),
+            reporter({
+                clearReportedMessages: true,
+                throwError: false
+            })
+        ]));
 });
 
 gulp.task('build', ['js', 'css']);
