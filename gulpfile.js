@@ -164,4 +164,8 @@ gulp.task('stylelint', () => {
 gulp.task('build', ['js', 'css']);
 gulp.task('prod', ['build']);
 gulp.task('dev', ['build', 'browser-sync']);
-gulp.task('delete', ['clean']);
+gulp.task('clean-build', ['clean']);
+
+
+gulp.task('build', ['build-js', 'build-css', 'compile', 'fonts', 'image']);
+

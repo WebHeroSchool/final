@@ -4,10 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "galp lint && exit 1",
+    "test": "gulp lint",
+    "hello": "echo hello",
     "start": "gulp dev",
-    "build": "gulp",
-    "clean": "clean-build"
+    "build": "gulp prod",
+    "clean": "clean-build",
+    "create": "mkdir build",
+    "delete": "rm -rf build",
+    "postinstall": "gulp"
   },
   "pre-push": [
     "test"
